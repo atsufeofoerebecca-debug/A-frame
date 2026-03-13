@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Modern Monochromatic A-Frame Scene</title>
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script>
+    AFRAME.registerComponent('modern-outdoors', {
+      init: function () {
+        let el = this.el;
+
+        // Generate scattered fallen leaves (Red, Pink, Autumn mix)
+        for (let i = 0; i < 600; i++) {
+          let x = (Math.random() - 0.5) * 80;
+          let z = (Math.random() - 0.5) * 80;
+
+          // Leave the center room area empty
+          if (Math.abs(x) < 9 && Math.abs(z) < 9) continue;
+          // Leave the Paths mostly clear
+          if (Math.abs(x + 3) < 2 && z > 7 && Math.random() > 0.2) continue;
+
+          let leaf = document.createElement('a-entity');
+
+          // A squashed shape to mimic a fallen leaf
+          let leafShape = document.createElement('a-cone');
+          leafShape.setAttribute('radius-bottom', '0.12');
+          leafShape.setAttribute('radius-top', '0.01');
+          leafShape.setAttribute('height', '0.02');
+
+          // Randomize rotation so it lies flat on the ground with a slight tilt
+          let rotY = Math.random() * 360;
+          let rotX = (Math.random() - 0.5) * 30;
+          let rotZ = (Math.random() - 0.5) * 30;
+          leaf.setAttribute('rotation', `${rotX} ${rotY} ${rotZ}`);
+
+          // Position slightly above the ground slightly randomized height to prevent Z-fighting
+          let y = 0.01 + Math.random() * 0.02;
+          leaf.setAttribute('position', `${x} ${y} ${z}`);
+
+          // Color palette based on the uploaded image (vibrant reds, pinks, some green/brown)
+          const colors = ['#EF4444', '#DC2626', '#F43F5E', '#BE123C', '#FDA4AF', '#65A30D', '#991B1B'];
+          let color = colors[Math.floor(Math.random() * colors.length)];
+
+          leafShape.setAttribute('color', color);
+          leafShape.setAttribute('material', 'roughness: 0.9');
+
+          leaf.appendChild(leafShape);
+          el.appendChild(leaf);
+        }
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <a-scene>
+    <a-assets>
+      <!-- For textures, since we can't reliably load local unserved files dynamically, 
+             we will use basic geometry and colors for the cans with text labels, 
+             but include placeholder src hooks where custom textures can be attached. -->
+      <img id="milo"
+        src="https://plus.unsplash.com/premium_photo-1663954653635-43ea23cc62b3?q=80&w=256&auto=format&fit=crop"
+        crossorigin="anonymous">
+      <img id="milk" src="https://images.unsplash.com/photo-1550583724-b2692b85b150?q=80&w=256&auto=format&fit=crop"
+        crossorigin="anonymous">
+
+      <!-- TV and Wall Art Images -->
+      <img id="tv-program"
+        src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?q=80&w=800&auto=format&fit=crop"
+        crossorigin="anonymous"> <!-- Movie/Program scene -->
+      <img id="art-1" src="rosary.jpg"
+        crossorigin="anonymous"> <!-- Catholic Art 1 (Rosary) -->
+      <img id="art-2" src="jesus.jpg"
+        crossorigin="anonymous"> <!-- Catholic Art 2 (Jesus) -->
+      <img id="art-3" src="first_communion.jpg"
+        crossorigin="anonymous"> <!-- Catholic Art 3 (Communion Quote) -->
+
+      <!-- Framed Picture imagery (Left Wall) -->
+      <img id="family-photo"
+        src="https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=500&auto=format&fit=crop"
+        crossorigin="anonymous"> <!-- Happy gather photo -->
+
+      <!-- Sky Texture -->
+      <img id="cloudy-sky"
+        src="https://images.unsplash.com/photo-1509803874385-db7c23652552?q=80&w=2000&auto=format&fit=crop"
+        crossorigin="anonymous"> <!-- Modern cloudy sky -->
+    </a-assets>
+
+    <!-- LIGHTING -->
+    <!-- Modern soft lighting -->
+    <a-light type="ambient" color="#ffffff" intensity="0.7"></a-light>
+    <a-light type="directional" color="#ffffff" intensity="0.5" position="2 4 1" castShadow="true"></a-light>
+
+    <!-- ROOM ENVIRONMENT -->
+    <!-- Modern Cloudy Sky -->
+    <a-sky src="#cloudy-sky" rotation="0 -90 0"></a-sky>
+
+    <!-- Expansive Modern Grass Ground -->
+    <a-plane id="expansive-ground" width="100" height="100" rotation="-90 0 0" position="0 -0.02 0" color="#3F6212"
+      material="roughness: 1"></a-plane>
+    <a-entity modern-outdoors></a-entity>
+
+    <!-- Beautiful Stepping Stone Paths leading out the doors -->
+
+    <!-- Path from Front Door (behind camera) -->
+    <a-entity position="-3 0.01 7.5">
+      <a-box width="0.8" height="0.04" depth="1.2" position="0 0 1.0" rotation="0 -5 0" color="#CBD5E1"
+        material="roughness: 0.9"></a-box>
+      <a-box width="0.9" height="0.04" depth="1.1" position="0.1 0 2.5" rotation="0 3 0" color="#94A3B8"
+        material="roughness: 0.9"></a-box>
+      <a-box width="0.7" height="0.04" depth="1.3" position="-0.05 0 4.0" rotation="0 -8 0" color="#CBD5E1"
+        material="roughness: 0.9"></a-box>
+      <a-box width="1.0" height="0.04" depth="1.0" position="0.05 0 5.5" rotation="0 6 0" color="#94A3B8"
+        material="roughness: 0.9"></a-box>
+      <a-box width="0.8" height="0.04" depth="1.2" position="-0.1 0 7.0" rotation="0 -2 0" color="#CBD5E1"
+        material="roughness: 0.9"></a-box>
+      <a-box width="0.9" height="0.04" depth="1.1" position="0.1 0 8.5" rotation="0 4 0" color="#94A3B8"
+        material="roughness: 0.9"></a-box>
+      <a-box width="0.7" height="0.04" depth="1.3" position="-0.05 0 10.0" rotation="0 -7 0" color="#CBD5E1"
+        material="roughness: 0.9"></a-box>
+      <a-box width="1.0" height="0.04" depth="1.0" position="0.05 0 11.5" rotation="0 2 0" color="#94A3B8"
+        material="roughness: 0.9"></a-box>
+      <a-box width="0.8" height="0.04" depth="1.2" position="0.0 0 13.0" rotation="0 -5 0" color="#CBD5E1"
+        material="roughness: 0.9"></a-box>
+    </a-entity>
+
+    <!-- Floor (Modern Concrete/Tile look) -->
+    <!-- Base Floor Color -->
+    <a-plane width="15" height="15" rotation="-90 0 0" color="#E2E8F0" material="roughness: 0.8"></a-plane>
+    <!-- Floor Tile Grid Lines (Darker for contrast, data URI generates a simple 2x2 px grid) -->
+    <a-plane width="15" height="15" rotation="-90 0 0" position="0 0.005 0" color="#94A3B8"
+      material="src: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAFElEQVQIW2NkYGD4z8DAwMgAI0AMCKcCBXY/l8AAAAASUVORK5CYII=); repeat: 10 10; opacity: 0.7"></a-plane>
+
+    <!-- Modern Patterned Carpet -->
+    <a-entity position="0 0.01 -3">
+      <!-- Soft plush base (Dark Navy) -->
+      <a-circle radius="3.6" rotation="-90 0 0" color="#0F172A" material="roughness: 1; metalness: 0"></a-circle>
+
+      <!-- Modern Geometric Patterns (Orange and Cream) -->
+      <a-plane width="4.5" height="4.5" rotation="-90 0 45" position="0 0.005 0" color="#F97316"
+        material="opacity: 0.8; shader: flat"></a-plane>
+      <a-plane width="3" height="3" rotation="-90 0 45" position="0 0.01 0" color="#F8FAFC"
+        material="opacity: 0.9; shader: flat"></a-plane>
+
+      <!-- Center Circle (Navy) -->
+      <a-circle radius="1.4" rotation="-90 0 0" position="0 0.015 0" color="#1E3A8A"
+        material="roughness: 1; metalness: 0"></a-circle>
+    </a-entity>
+
+    <!-- Ceiling (Modern tiled with lights) -->
+    <a-entity position="0 4 0">
+      <!-- Base ceiling -->
+      <a-plane width="15" height="15" rotation="90 0 0" color="#FFFFFF" material="roughness: 1"></a-plane>
+      <!-- Tile Grid Lines (Darker for contrast, data URI generates a simple 2x2 px grid) -->
+      <a-plane width="15" height="15" rotation="90 0 0" position="0 -0.01 0" color="#E2E8F0"
+        material="src: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAFElEQVQIW2NkYGD4z8DAwMgAI0AMCKcCBXY/l8AAAAASUVORK5CYII=); repeat: 10 10;"></a-plane>
+
+      <!-- Recessed Ceiling Lights -->
+      <!-- Light 1 -->
+      <a-box width="1.5" height="0.1" depth="1.5" position="-3 0 -3" color="#FFFFFF"></a-box>
+      <a-plane width="1.4" height="1.4" rotation="90 0 0" position="-3 -0.06 -3" color="#FEF08A"
+        material="shader: flat; opacity: 0.9"></a-plane>
+      <!-- Light 2 -->
+      <a-box width="1.5" height="0.1" depth="1.5" position="3 0 -3" color="#FFFFFF"></a-box>
+      <a-plane width="1.4" height="1.4" rotation="90 0 0" position="3 -0.06 -3" color="#FEF08A"
+        material="shader: flat; opacity: 0.9"></a-plane>
+      <!-- Light 3 -->
+      <a-box width="1.5" height="0.1" depth="1.5" position="-3 0 3" color="#FFFFFF"></a-box>
+      <a-plane width="1.4" height="1.4" rotation="90 0 0" position="-3 -0.06 3" color="#FEF08A"
+        material="shader: flat; opacity: 0.9"></a-plane>
+      <!-- Light 4 -->
+      <a-box width="1.5" height="0.1" depth="1.5" position="3 0 3" color="#FFFFFF"></a-box>
+      <a-plane width="1.4" height="1.4" rotation="90 0 0" position="3 -0.06 3" color="#FEF08A"
+        material="shader: flat; opacity: 0.9"></a-plane>
+      <!-- Center Light -->
+      <a-box width="1.5" height="0.1" depth="1.5" position="0 0 0" color="#FFFFFF"></a-box>
+      <a-plane width="1.4" height="1.4" rotation="90 0 0" position="0 -0.06 0" color="#FEF08A"
+        material="shader: flat; opacity: 0.9"></a-plane>
+    </a-entity>
+
+    <!-- Back Wall -->
+    <!-- Interior (Purple) -->
+    <a-plane width="15" height="4" position="0 2 -7.48" color="#581C87" material="roughness: 1"></a-plane>
+    <!-- Exterior (Navy Blue) -->
+    <a-plane width="15" height="4" position="0 2 -7.52" rotation="0 180 0" color="#1E3A8A" 
+      material="roughness: 1"></a-plane>
+
+    <!-- Left Wall (Lavender) -->
+    <!-- Interior -->
+    <a-plane width="15" height="4" position="-7.48 2 0" rotation="0 90 0" color="#E9D5FF" material="roughness: 1"></a-plane>
+    <!-- Exterior (Navy Blue with Clerestory Window) -->
+    <a-plane width="15" height="3.5" position="-7.52 1.75 0" rotation="0 -90 0" color="#1E3A8A"
+      material="roughness: 1"></a-plane>
+    <a-plane width="15" height="0.5" position="-7.52 3.75 0" rotation="0 -90 0" color="#E0F2FE"
+      material="opacity: 0.6; roughness: 0.1; metalness: 0.1"></a-plane>
+
+    <!-- Right Wall (Lavender) -->
+    <!-- Interior -->
+    <a-plane width="15" height="4" position="7.48 2 0" rotation="0 -90 0" color="#E9D5FF" material="roughness: 1"></a-plane>
+    <!-- Exterior (Navy Blue with Clerestory Window) -->
+    <a-plane width="15" height="3.5" position="7.52 1.75 0" rotation="0 90 0" color="#1E3A8A"
+      material="roughness: 1"></a-plane>
+    <a-plane width="15" height="0.5" position="7.52 3.75 0" rotation="0 90 0" color="#E0F2FE"
+      material="opacity: 0.6; roughness: 0.1; metalness: 0.1"></a-plane>
+    <!-- Front wall (behind camera) -->
+    <!-- Solid Opaque Front Walls -->
+    <!-- Left Section -->
+    <!-- Interior -->
+    <a-plane width="3.9" height="4" position="-5.55 2 7.48" rotation="0 180 0" color="#581C87" material="roughness: 1"></a-plane>
+    <!-- Exterior -->
+    <a-plane width="3.9" height="4" position="-5.55 2 7.52" rotation="0 0 0" color="#1E3A8A" material="roughness: 1"></a-plane>
+    
+    <!-- Right Section -->
+    <!-- Interior -->
+    <a-plane width="9.9" height="4" position="2.55 2 7.48" rotation="0 180 0" color="#581C87" material="roughness: 1"></a-plane>
+    <!-- Exterior -->
+    <a-plane width="9.9" height="4" position="2.55 2 7.52" rotation="0 0 0" color="#1E3A8A" material="roughness: 1"></a-plane>
+    
+    <!-- Top section (above door) -->
+    <!-- Interior -->
+    <a-plane width="1.2" height="2" position="-3 3 7.48" rotation="0 180 0" color="#581C87" material="roughness: 1"></a-plane>
+    <!-- Exterior -->
+    <a-plane width="1.2" height="2" position="-3 3 7.52" rotation="0 0 0" color="#1E3A8A" material="roughness: 1"></a-plane>
+
+    <!-- ROOF OVERHANG & ARCHITECTURE -->
+    <a-entity position="0 4 8">
+      <!-- Main overhang slab -->
+      <a-box width="16" height="0.15" depth="6" position="0 0.07 0" color="#1C1917" material="roughness: 0.3"></a-box>
+      <!-- Underside LED glow -->
+      <a-box width="15.8" height="0.02" depth="5.8" position="0 -0.01 0" color="#38BDF8" material="shader: flat; opacity: 0.4"></a-box>
+      
+      <!-- Support Columns -->
+      <a-box width="0.3" height="4.1" depth="0.3" position="-7.5 -2.05 2.5" color="#0F172A" material="metalness: 0.7; roughness: 0.2"></a-box>
+      <a-box width="0.3" height="4.1" depth="0.3" position="7.5 -2.05 2.5" color="#0F172A" material="metalness: 0.7; roughness: 0.2"></a-box>
+    </a-entity>
+
+    <!-- EXTERIOR WALL SCONCES -->
+    <a-entity position="-3.6 2.5 7.55">
+      <a-box width="0.08" height="0.3" depth="0.08" color="#1C1917"></a-box>
+      <a-sphere radius="0.02" position="0 0.1 0.05" color="#FEF08A" material="shader: flat"></a-sphere>
+      <a-sphere radius="0.02" position="0 -0.1 0.05" color="#FEF08A" material="shader: flat"></a-sphere>
+    </a-entity>
+    <a-entity position="-2.4 2.5 7.55">
+      <a-box width="0.08" height="0.3" depth="0.08" color="#1C1917"></a-box>
+      <a-sphere radius="0.02" position="0 0.1 0.05" color="#FEF08A" material="shader: flat"></a-sphere>
+      <a-sphere radius="0.02" position="0 -0.1 0.05" color="#FEF08A" material="shader: flat"></a-sphere>
+    </a-entity>
+
+
+
+    <!-- MODERN OUTDOOR PERIMETER WALL -->
+    <a-entity position="0 0 0">
+      <!-- === FRONT WALL (left of gate) === -->
+      <!-- Concrete base -->
+      <a-box width="16" height="0.6" depth="0.2" position="-11 0.3 20" color="#D6D3D1" material="roughness: 0.9"></a-box>
+      <!-- Frosted glass panel -->
+      <a-box width="16" height="0.8" depth="0.06" position="-11 1.0 20" color="#E0F2FE" material="opacity: 0.4; roughness: 0.1; metalness: 0.1"></a-box>
+      <!-- Dark metal frame top -->
+      <a-box width="16" height="0.06" depth="0.22" position="-11 1.43 20" color="#1C1917" material="metalness: 0.7; roughness: 0.3"></a-box>
+      <!-- LED accent strip -->
+      <a-box width="16" height="0.03" depth="0.08" position="-11 1.47 20" color="#38BDF8" material="shader: flat; opacity: 0.8"></a-box>
+
+      <!-- === FRONT WALL (right of gate) === -->
+      <a-box width="16" height="0.6" depth="0.2" position="11 0.3 20" color="#D6D3D1" material="roughness: 0.9"></a-box>
+      <a-box width="16" height="0.8" depth="0.06" position="11 1.0 20" color="#E0F2FE" material="opacity: 0.4; roughness: 0.1; metalness: 0.1"></a-box>
+      <a-box width="16" height="0.06" depth="0.22" position="11 1.43 20" color="#1C1917" material="metalness: 0.7; roughness: 0.3"></a-box>
+      <a-box width="16" height="0.03" depth="0.08" position="11 1.47 20" color="#38BDF8" material="shader: flat; opacity: 0.8"></a-box>
+
+      <!-- === BACK WALL === -->
+      <a-box width="40" height="0.6" depth="0.2" position="0 0.3 -20" color="#D6D3D1" material="roughness: 0.9"></a-box>
+      <a-box width="40" height="0.8" depth="0.06" position="0 1.0 -20" color="#E0F2FE" material="opacity: 0.4; roughness: 0.1; metalness: 0.1"></a-box>
+      <a-box width="40" height="0.06" depth="0.22" position="0 1.43 -20" color="#1C1917" material="metalness: 0.7; roughness: 0.3"></a-box>
+      <a-box width="40" height="0.03" depth="0.08" position="0 1.47 -20" color="#38BDF8" material="shader: flat; opacity: 0.8"></a-box>
+
+      <!-- === LEFT WALL === -->
+      <a-box width="0.2" height="0.6" depth="40" position="-20 0.3 0" color="#D6D3D1" material="roughness: 0.9"></a-box>
+      <a-box width="0.06" height="0.8" depth="40" position="-20 1.0 0" color="#E0F2FE" material="opacity: 0.4; roughness: 0.1; metalness: 0.1"></a-box>
+      <a-box width="0.22" height="0.06" depth="40" position="-20 1.43 0" color="#1C1917" material="metalness: 0.7; roughness: 0.3"></a-box>
+      <a-box width="0.08" height="0.03" depth="40" position="-20 1.47 0" color="#38BDF8" material="shader: flat; opacity: 0.8"></a-box>
+
+      <!-- === RIGHT WALL === -->
+      <a-box width="0.2" height="0.6" depth="40" position="20 0.3 0" color="#D6D3D1" material="roughness: 0.9"></a-box>
+      <a-box width="0.06" height="0.8" depth="40" position="20 1.0 0" color="#E0F2FE" material="opacity: 0.4; roughness: 0.1; metalness: 0.1"></a-box>
+      <a-box width="0.22" height="0.06" depth="40" position="20 1.43 0" color="#1C1917" material="metalness: 0.7; roughness: 0.3"></a-box>
+      <a-box width="0.08" height="0.03" depth="40" position="20 1.47 0" color="#38BDF8" material="shader: flat; opacity: 0.8"></a-box>
+
+      <!-- === GATE PILLARS (front pathway) === -->
+      <!-- Left pillar -->
+      <a-box width="0.3" height="1.8" depth="0.3" position="-3.8 0.9 20" color="#292524" material="metalness: 0.5; roughness: 0.4"></a-box>
+      <a-box width="0.4" height="0.08" depth="0.4" position="-3.8 1.84 20" color="#CBD5E1" material="metalness: 0.8; roughness: 0.2"></a-box>
+      <a-sphere radius="0.08" position="-3.8 1.92 20" color="#38BDF8" material="shader: flat"></a-sphere>
+      <!-- Right pillar -->
+      <a-box width="0.3" height="1.8" depth="0.3" position="-2.2 0.9 20" color="#292524" material="metalness: 0.5; roughness: 0.4"></a-box>
+      <a-box width="0.4" height="0.08" depth="0.4" position="-2.2 1.84 20" color="#CBD5E1" material="metalness: 0.8; roughness: 0.2"></a-box>
+      <a-sphere radius="0.08" position="-2.2 1.92 20" color="#38BDF8" material="shader: flat"></a-sphere>
+
+      <!-- === CORNER PILLARS === -->
+      <a-box width="0.3" height="1.8" depth="0.3" position="-20 0.9 20" color="#292524" material="metalness: 0.5; roughness: 0.4"></a-box>
+      <a-box width="0.3" height="1.8" depth="0.3" position="20 0.9 20" color="#292524" material="metalness: 0.5; roughness: 0.4"></a-box>
+      <a-box width="0.3" height="1.8" depth="0.3" position="-20 0.9 -20" color="#292524" material="metalness: 0.5; roughness: 0.4"></a-box>
+      <a-box width="0.3" height="1.8" depth="0.3" position="20 0.9 -20" color="#292524" material="metalness: 0.5; roughness: 0.4"></a-box>
+    </a-entity>
+
+    <!-- MODERN SWIMMING POOL (Right-front of house) -->
+    <a-entity position="12 0 12">
+      <!-- Pool basin (sunken into ground) -->
+      <a-box width="8" height="0.1" depth="4" position="0 -0.3 0" color="#1E3A8A" material="roughness: 0.2"></a-box>
+      <!-- Water surface -->
+      <a-plane width="7.8" height="3.8" rotation="-90 0 0" position="0 -0.05 0" color="#2563EB"
+        material="opacity: 0.75; roughness: 0.05; metalness: 0.3"></a-plane>
+      <!-- Pool walls (visible above ground) -->
+      <a-box width="8.2" height="0.4" depth="0.15" position="0 -0.05 -2" color="#F5F5F4" material="roughness: 0.3"></a-box>
+      <a-box width="8.2" height="0.4" depth="0.15" position="0 -0.05 2" color="#F5F5F4" material="roughness: 0.3"></a-box>
+      <a-box width="0.15" height="0.4" depth="4.1" position="-4.05 -0.05 0" color="#F5F5F4" material="roughness: 0.3"></a-box>
+      <a-box width="0.15" height="0.4" depth="4.1" position="4.05 -0.05 0" color="#F5F5F4" material="roughness: 0.3"></a-box>
+      <!-- Pool deck (stone surround) -->
+      <a-plane width="10" height="6" rotation="-90 0 0" position="0 0.01 0" color="#E7E5E4" material="roughness: 0.8"></a-plane>
+      <!-- Pool edge coping (modern trim) -->
+      <a-box width="8.4" height="0.08" depth="0.3" position="0 0.15 -2.1" color="#D6D3D1" material="roughness: 0.5"></a-box>
+      <a-box width="8.4" height="0.08" depth="0.3" position="0 0.15 2.1" color="#D6D3D1" material="roughness: 0.5"></a-box>
+      <a-box width="0.3" height="0.08" depth="4.5" position="-4.2 0.15 0" color="#D6D3D1" material="roughness: 0.5"></a-box>
+      <a-box width="0.3" height="0.08" depth="4.5" position="4.2 0.15 0" color="#D6D3D1" material="roughness: 0.5"></a-box>
+      <!-- Pool ladder -->
+      <a-cylinder radius="0.03" height="0.8" position="3.5 0.25 1.8" color="#CBD5E1" material="metalness: 0.9; roughness: 0.1"></a-cylinder>
+      <a-cylinder radius="0.03" height="0.8" position="3.8 0.25 1.8" color="#CBD5E1" material="metalness: 0.9; roughness: 0.1"></a-cylinder>
+      <a-cylinder radius="0.02" height="0.35" position="3.65 0.5 1.8" rotation="0 0 90" color="#CBD5E1" material="metalness: 0.9; roughness: 0.1"></a-cylinder>
+      <a-cylinder radius="0.02" height="0.35" position="3.65 0.3 1.8" rotation="0 0 90" color="#CBD5E1" material="metalness: 0.9; roughness: 0.1"></a-cylinder>
+      <!-- LED pool lights (underwater glow) -->
+      <a-sphere radius="0.1" position="-3 -0.2 0" color="#38BDF8" material="shader: flat; opacity: 0.6"></a-sphere>
+      <a-sphere radius="0.1" position="0 -0.2 0" color="#38BDF8" material="shader: flat; opacity: 0.6"></a-sphere>
+      <a-sphere radius="0.1" position="3 -0.2 0" color="#38BDF8" material="shader: flat; opacity: 0.6"></a-sphere>
+    </a-entity>
+
+    <!-- MODERN CAR PARK (Left-front of house) -->
+    <a-entity position="-14 0 12">
+      <!-- Paved surface (dark asphalt) -->
+      <a-plane width="10" height="8" rotation="-90 0 0" position="0 0.01 0" color="#292524" material="roughness: 0.95"></a-plane>
+      <!-- Concrete border -->
+      <a-box width="10.2" height="0.1" depth="0.15" position="0 0.05 -4" color="#D6D3D1" material="roughness: 0.8"></a-box>
+      <a-box width="10.2" height="0.1" depth="0.15" position="0 0.05 4" color="#D6D3D1" material="roughness: 0.8"></a-box>
+      <a-box width="0.15" height="0.1" depth="8.2" position="-5.05 0.05 0" color="#D6D3D1" material="roughness: 0.8"></a-box>
+      <a-box width="0.15" height="0.1" depth="8.2" position="5.05 0.05 0" color="#D6D3D1" material="roughness: 0.8"></a-box>
+
+      <!-- Parking lines (white stripes for 3 spaces) -->
+      <a-plane width="0.1" height="5" rotation="-90 0 0" position="-2.5 0.02 0" color="#FFFFFF" material="shader: flat"></a-plane>
+      <a-plane width="0.1" height="5" rotation="-90 0 0" position="0 0.02 0" color="#FFFFFF" material="shader: flat"></a-plane>
+      <a-plane width="0.1" height="5" rotation="-90 0 0" position="2.5 0.02 0" color="#FFFFFF" material="shader: flat"></a-plane>
+      <!-- Front line -->
+      <a-plane width="7.6" height="0.1" rotation="-90 0 0" position="0 0.02 -2.5" color="#FFFFFF" material="shader: flat"></a-plane>
+
+      <!-- Modern car shade structure (canopy) -->
+      <!-- Support pillars -->
+      <a-cylinder radius="0.08" height="2.5" position="-4.5 1.25 -3.5" color="#44403C" material="metalness: 0.7; roughness: 0.3"></a-cylinder>
+      <a-cylinder radius="0.08" height="2.5" position="4.5 1.25 -3.5" color="#44403C" material="metalness: 0.7; roughness: 0.3"></a-cylinder>
+      <a-cylinder radius="0.08" height="2.5" position="-4.5 1.25 2.5" color="#44403C" material="metalness: 0.7; roughness: 0.3"></a-cylinder>
+      <a-cylinder radius="0.08" height="2.5" position="4.5 1.25 2.5" color="#44403C" material="metalness: 0.7; roughness: 0.3"></a-cylinder>
+      <!-- Canopy roof -->
+      <a-box width="10" height="0.08" depth="7" position="0 2.5 -0.5" color="#1C1917" material="metalness: 0.6; roughness: 0.3"></a-box>
+      <!-- Canopy edge trim -->
+      <a-box width="10.1" height="0.04" depth="0.06" position="0 2.46 -3.53" color="#38BDF8" material="shader: flat; opacity: 0.8"></a-box>
+      <a-box width="10.1" height="0.04" depth="0.06" position="0 2.46 2.53" color="#38BDF8" material="shader: flat; opacity: 0.8"></a-box>
+
+      <!-- Modern parked car (simplified geometric) -->
+      <a-entity position="-1.25 0 -0.5">
+        <!-- Car body -->
+        <a-box width="2" height="0.5" depth="4" position="0 0.5 0" color="#1E3A8A" material="metalness: 0.4; roughness: 0.3"></a-box>
+        <!-- Car cabin -->
+        <a-box width="1.8" height="0.5" depth="2" position="0 0.9 -0.3" color="#0F172A" material="opacity: 0.7; roughness: 0.1; metalness: 0.2"></a-box>
+        <!-- Wheels -->
+        <a-cylinder radius="0.25" height="0.15" position="-0.95 0.25 1.2" rotation="0 0 90" color="#1C1917"></a-cylinder>
+        <a-cylinder radius="0.25" height="0.15" position="0.95 0.25 1.2" rotation="0 0 90" color="#1C1917"></a-cylinder>
+        <a-cylinder radius="0.25" height="0.15" position="-0.95 0.25 -1.2" rotation="0 0 90" color="#1C1917"></a-cylinder>
+        <a-cylinder radius="0.25" height="0.15" position="0.95 0.25 -1.2" rotation="0 0 90" color="#1C1917"></a-cylinder>
+        <!-- Headlights -->
+        <a-sphere radius="0.08" position="-0.7 0.5 2" color="#FEF08A" material="shader: flat"></a-sphere>
+        <a-sphere radius="0.08" position="0.7 0.5 2" color="#FEF08A" material="shader: flat"></a-sphere>
+        <!-- Taillights -->
+        <a-sphere radius="0.06" position="-0.7 0.5 -2" color="#EF4444" material="shader: flat"></a-sphere>
+        <a-sphere radius="0.06" position="0.7 0.5 -2" color="#EF4444" material="shader: flat"></a-sphere>
+      </a-entity>
+    </a-entity>
+
+    <!-- MODERN SECOND DOOR (Front Wall - New) -->
+    <a-entity position="-3 1 7.45" rotation="0 180 0">
+      <!-- Frame -->
+      <a-box width="1.2" height="2" depth="0.1" color="#334155"></a-box>
+      <!-- Hinge (Door swung open 70 degrees outward from room) -->
+      <a-entity position="-0.55 0 -0.05" rotation="0 -70 0">
+        <a-entity position="0.55 0 0">
+          <!-- Door Panel -->
+          <a-box width="1.1" height="1.9" depth="0.12" color="#0F172A"></a-box>
+          <!-- Handle -->
+          <a-cylinder radius="0.02" height="0.15" position="-0.45 0 -0.08" rotation="90 0 0"
+            color="#CBD5E1"></a-cylinder>
+        </a-entity>
+      </a-entity>
+    </a-entity>
+
+    <!-- LARGE FRAMED FAMILY PORTRAIT (Left Wall) -->
+    <a-entity position="-7.4 2.2 -0.5" rotation="0 90 0">
+      <!-- Ultra-thin Modern Metal Frame (Brushed Steel) -->
+      <a-box width="2.25" height="1.65" depth="0.04" color="#E2E8F0" material="metalness: 0.8; roughness: 0.2"></a-box>
+      <!-- Crisp White Inner Matting -->
+      <a-plane width="2.2" height="1.6" position="0 0 0.021" color="#FFFFFF" material="roughness: 1"></a-plane>
+
+      <!-- The Family Portrait Photo -->
+      <a-plane width="1.9" height="1.3" position="0 0 0.022" material="src: #family-photo; shader: flat"></a-plane>
+
+      <!-- Glass Sheen -->
+      <a-plane width="2.2" height="1.6" position="0 0 0.03" color="#FFFFFF"
+        material="opacity: 0.15; roughness: 0.05"></a-plane>
+    </a-entity>
+
+    <!-- MODERN TV (Right Wall) -->
+    <a-entity position="7.4 2 -3" rotation="0 -90 0">
+      <!-- TV Frame -->
+      <a-box width="3.5" height="2" depth="0.1" color="#000000"></a-box>
+      <!-- TV Screen (Showing Program) -->
+      <a-plane width="3.4" height="1.9" position="0 0 0.06" material="src: #tv-program; shader: flat"></a-plane>
+    </a-entity>
+
+    <!-- WALL PICTURES (Back Wall) -->
+    <a-entity position="0 2.5 -7.4">
+      <!-- Picture 1 (Catholic Art 1) -->
+      <a-entity position="-1.5 0 0">
+        <!-- Thin Metal Frame -->
+        <a-box width="1.1" height="1.3" depth="0.04" color="#E2E8F0" material="metalness: 0.8; roughness: 0.2"></a-box>
+        <!-- White Matting -->
+        <a-plane width="1.05" height="1.25" position="0 0 0.021" color="#FFFFFF" material="roughness: 1"></a-plane>
+        <!-- Canvas -->
+        <a-plane width="0.85" height="1.05" position="0 0 0.025" material="src: #art-1; shader: flat"></a-plane>
+        <!-- Glass -->
+        <a-plane width="1.05" height="1.25" position="0 0 0.03" color="#FFFFFF"
+          material="opacity: 0.15; roughness: 0.05"></a-plane>
+      </a-entity>
+
+      <!-- Picture 2 (Catholic Art 2) -->
+      <a-entity position="0 0 0">
+        <!-- Thin Metal Frame -->
+        <a-box width="1.1" height="1.3" depth="0.04" color="#E2E8F0" material="metalness: 0.8; roughness: 0.2"></a-box>
+        <!-- White Matting -->
+        <a-plane width="1.05" height="1.25" position="0 0 0.021" color="#FFFFFF" material="roughness: 1"></a-plane>
+        <!-- Canvas -->
+        <a-plane width="0.85" height="1.05" position="0 0 0.025" material="src: #art-2; shader: flat"></a-plane>
+        <!-- Glass -->
+        <a-plane width="1.05" height="1.25" position="0 0 0.03" color="#FFFFFF"
+          material="opacity: 0.15; roughness: 0.05"></a-plane>
+      </a-entity>
+
+      <!-- Picture 3 (Catholic Art 3) -->
+      <a-entity position="1.5 0 0">
+        <!-- Thin Metal Frame -->
+        <a-box width="1.1" height="1.3" depth="0.04" color="#E2E8F0" material="metalness: 0.8; roughness: 0.2"></a-box>
+        <!-- White Matting -->
+        <a-plane width="1.05" height="1.25" position="0 0 0.021" color="#FFFFFF" material="roughness: 1"></a-plane>
+        <!-- Canvas -->
+        <a-plane width="0.85" height="1.05" position="0 0 0.025" material="src: #art-3; shader: flat"></a-plane>
+        <!-- Glass -->
+        <a-plane width="1.05" height="1.25" position="0 0 0.03" color="#FFFFFF"
+          material="opacity: 0.15; roughness: 0.05"></a-plane>
+      </a-entity>
+    </a-entity>
+
+    <!-- MODERN CEILING FANS -->
+    <!-- Fan 1 -->
+    <a-entity position="0 3.8 -3" animation="property: rotation; to: 0 360 0; loop: true; dur: 3000; easing: linear">
+      <!-- Mount -->
+      <a-cylinder radius="0.1" height="0.1" position="0 0.15 0" color="#334155"></a-cylinder>
+      <a-cylinder radius="0.03" height="0.3" position="0 0 0" color="#334155"></a-cylinder>
+      <!-- Motor -->
+      <a-cylinder radius="0.2" height="0.1" position="0 -0.15 0" color="#0F172A"></a-cylinder>
+      <!-- Light -->
+      <a-sphere radius="0.1" position="0 -0.25 0" color="#FEF08A" material="shader: flat"></a-sphere>
+      <!-- Blades (3 sleek blades) -->
+      <a-box width="1.8" height="0.02" depth="0.15" position="0 -0.15 0" rotation="0 0 0" color="#94A3B8"></a-box>
+      <a-box width="1.8" height="0.02" depth="0.15" position="0 -0.15 0" rotation="0 120 0" color="#94A3B8"></a-box>
+      <a-box width="1.8" height="0.02" depth="0.15" position="0 -0.15 0" rotation="0 240 0" color="#94A3B8"></a-box>
+    </a-entity>
+    <!-- Fan 2 -->
+    <a-entity position="0 3.8 3" animation="property: rotation; to: 0 360 0; loop: true; dur: 3000; easing: linear">
+      <!-- Mount -->
+      <a-cylinder radius="0.1" height="0.1" position="0 0.15 0" color="#334155"></a-cylinder>
+      <a-cylinder radius="0.03" height="0.3" position="0 0 0" color="#334155"></a-cylinder>
+      <!-- Motor -->
+      <a-cylinder radius="0.2" height="0.1" position="0 -0.15 0" color="#0F172A"></a-cylinder>
+      <!-- Light -->
+      <a-sphere radius="0.1" position="0 -0.25 0" color="#FEF08A" material="shader: flat"></a-sphere>
+      <!-- Blades (3 sleek blades) -->
+      <a-box width="1.8" height="0.02" depth="0.15" position="0 -0.15 0" rotation="0 0 0" color="#94A3B8"></a-box>
+      <a-box width="1.8" height="0.02" depth="0.15" position="0 -0.15 0" rotation="0 120 0" color="#94A3B8"></a-box>
+      <a-box width="1.8" height="0.02" depth="0.15" position="0 -0.15 0" rotation="0 240 0" color="#94A3B8"></a-box>
+    </a-entity>
+
+    <!-- MODERN TABLE -->
+    <a-entity id="table" position="0 0 -3">
+      <!-- Sleek White/Glass Top -->
+      <a-cylinder radius="1.3" height="0.04" position="0 0.8 0" color="#FFFFFF"
+        material="opacity: 0.95; roughness: 0.1; metalness: 0.2"></a-cylinder>
+      <!-- Center Pillar (Modern base) -->
+      <a-cylinder radius="0.08" height="0.8" position="0 0.4 0" color="#0F172A"
+        material="metalness: 0.6; roughness: 0.4"></a-cylinder>
+      <!-- Base Plate -->
+      <a-cylinder radius="0.6" height="0.02" position="0 0.01 0" color="#0F172A"
+        material="metalness: 0.6; roughness: 0.4"></a-cylinder>
+    </a-entity>
+
+    <!-- 4 MODERN CHAIRS -->
+    <!-- Arranged in a circle around the table -->
+
+    <!-- Chair 1 (Front) -->
+    <a-entity position="0 0 -1.7" rotation="0 180 0">
+      <a-cylinder radius="0.35" height="0.04" position="0 0.45 0" color="#FFFFFF"></a-cylinder>
+      <!-- Modern single pedestal leg -->
+      <a-cylinder radius="0.04" height="0.45" position="0 0.225 0" color="#0F172A"></a-cylinder>
+      <a-cylinder radius="0.25" height="0.02" position="0 0.01 0" color="#0F172A"></a-cylinder>
+      <!-- Modern curved backrest -->
+      <a-cylinder radius="0.35" height="0.3" position="0 0.62 0" theta-start="135" theta-length="180" color="#FFFFFF"
+        open-ended="true" side="double" material="opacity: 0.9"></a-cylinder>
+    </a-entity>
+
+    <!-- Chair 2 (Back) -->
+    <a-entity position="0 0 -4.3">
+      <a-cylinder radius="0.35" height="0.04" position="0 0.45 0" color="#FFFFFF"></a-cylinder>
+      <a-cylinder radius="0.04" height="0.45" position="0 0.225 0" color="#0F172A"></a-cylinder>
+      <a-cylinder radius="0.25" height="0.02" position="0 0.01 0" color="#0F172A"></a-cylinder>
+      <a-cylinder radius="0.35" height="0.3" position="0 0.62 0" theta-start="135" theta-length="180" color="#FFFFFF"
+        open-ended="true" side="double" material="opacity: 0.9"></a-cylinder>
+    </a-entity>
+
+    <!-- Chair 3 (Left) -->
+    <a-entity position="-1.3 0 -3" rotation="0 90 0">
+      <a-cylinder radius="0.35" height="0.04" position="0 0.45 0" color="#FFFFFF"></a-cylinder>
+      <a-cylinder radius="0.04" height="0.45" position="0 0.225 0" color="#0F172A"></a-cylinder>
+      <a-cylinder radius="0.25" height="0.02" position="0 0.01 0" color="#0F172A"></a-cylinder>
+      <a-cylinder radius="0.35" height="0.3" position="0 0.62 0" theta-start="135" theta-length="180" color="#FFFFFF"
+        open-ended="true" side="double" material="opacity: 0.9"></a-cylinder>
+    </a-entity>
+
+    <!-- Chair 4 (Right) -->
+    <a-entity position="1.3 0 -3" rotation="0 -90 0">
+      <a-cylinder radius="0.35" height="0.04" position="0 0.45 0" color="#FFFFFF"></a-cylinder>
+      <a-cylinder radius="0.04" height="0.45" position="0 0.225 0" color="#0F172A"></a-cylinder>
+      <a-cylinder radius="0.25" height="0.02" position="0 0.01 0" color="#0F172A"></a-cylinder>
+      <a-cylinder radius="0.35" height="0.3" position="0 0.62 0" theta-start="135" theta-length="180" color="#FFFFFF"
+        open-ended="true" side="double" material="opacity: 0.9"></a-cylinder>
+    </a-entity>
+
+    <!-- ITEMS ON THE TABLE -->
+    <a-entity id="items" position="0 0.82 -3">
+      <!-- Milo Tin -->
+      <a-entity position="-0.25 0.08 0.1">
+        <a-cylinder radius="0.06" height="0.16" color="#005C29" src="#milo"></a-cylinder>
+        <a-cylinder radius="0.062" height="0.02" color="#FACC15" position="0 0.08 0"></a-cylinder>
+        <a-cylinder radius="0.062" height="0.02" color="#FACC15" position="0 -0.08 0"></a-cylinder>
+        <a-text value="MILO" color="white" position="0 0 0.065" align="center" width="0.7"></a-text>
+      </a-entity>
+
+      <!-- Milk Tin -->
+      <a-entity position="0.3 0.06 -0.1">
+        <a-cylinder radius="0.05" height="0.12" color="#E2E8F0" src="#milk"></a-cylinder>
+        <a-text value="MILK" color="#1E3A8A" position="0 -0.01 0.055" align="center" width="0.5"></a-text>
+      </a-entity>
+
+      <!-- Cup 1 -->
+      <a-entity position="-0.05 0.04 0.35">
+        <a-cylinder radius="0.035" height="0.08" color="#F97316" open-ended="true" side="double"></a-cylinder>
+        <a-circle radius="0.035" rotation="-90 0 0" position="0 -0.04 0" color="#F97316"></a-circle>
+        <a-torus radius="0.02" radius-tubular="0.005" position="-0.035 0 0" rotation="0 90 0" color="#F97316"></a-torus>
+        <a-cylinder radius="0.033" height="0.07" position="0 0.005 0" color="#4B2E0B"></a-cylinder> <!-- Coffee -->
+      </a-entity>
+
+      <!-- Cup 2 -->
+      <a-entity position="0.15 0.04 0.25">
+        <a-cylinder radius="0.035" height="0.08" color="#0F172A" open-ended="true" side="double"></a-cylinder>
+        <a-circle radius="0.035" rotation="-90 0 0" position="0 -0.04 0" color="#0F172A"></a-circle>
+        <a-torus radius="0.02" radius-tubular="0.005" position="0.035 0 0" rotation="0 90 0" color="#0F172A"></a-torus>
+        <a-cylinder radius="0.033" height="0.07" position="0 0.005 0" color="#FFFFFF"></a-cylinder> <!-- Milk -->
+      </a-entity>
+    </a-entity>
+
+    <!-- PREMIUM BEAUTIFUL FLOWER POTS -->
+    <!-- Pot 1: Back-Left Corner (Tapered White with Gold Accent) -->
+    <a-entity position="-6.8 0 -6.8">
+      <!-- Tapered Pot -->
+      <a-cylinder radius-bottom="0.4" radius-top="0.5" height="0.8" color="#FFFFFF" material="roughness: 0.2"></a-cylinder>
+      <!-- Gold Rim Accent -->
+      <a-torus radius="0.5" radius-tubular="0.02" position="0 0.4 0" rotation="90 0 0" color="#D4AF37" material="metalness: 0.9; roughness: 0.1"></a-torus>
+      <!-- Soil & Decorative Pebbles -->
+      <a-cylinder radius="0.45" height="0.1" position="0 0.35 0" color="#422006"></a-cylinder>
+      <a-sphere radius="0.04" position="0.2 0.4 0.1" color="#F1F5F9"></a-sphere>
+      <a-sphere radius="0.04" position="-0.15 0.4 0.25" color="#F1F5F9"></a-sphere>
+      <a-sphere radius="0.04" position="0 0.4 -0.3" color="#F1F5F9"></a-sphere>
+      
+      <!-- Lush Detailed Plant -->
+      <a-entity position="0 0.4 0">
+        <a-cylinder radius="0.03" height="1.5" position="0 0.5 0" color="#166534"></a-cylinder>
+        <!-- Layered Leaves -->
+        <a-entity rotation="0 45 0">
+          <a-box width="0.6" height="0.01" depth="1.2" position="0.4 1 0.2" rotation="20 0 10" color="#15803D"></a-box>
+          <a-box width="0.6" height="0.01" depth="1.1" position="-0.4 0.8 -0.2" rotation="30 0 -15" color="#14532D"></a-box>
+          <a-box width="0.5" height="0.01" depth="0.9" position="0.3 0.6 0.3" rotation="10 0 5" color="#166534"></a-box>
+        </a-entity>
+        <a-entity rotation="0 135 0">
+          <a-box width="0.6" height="0.01" depth="1.2" position="0.4 0.9 0.2" rotation="20 0 10" color="#15803D"></a-box>
+          <a-box width="0.6" height="0.01" depth="1.1" position="-0.4 1.1 -0.2" rotation="30 0 -15" color="#14532D"></a-box>
+        </a-entity>
+      </a-entity>
+    </a-entity>
+
+    <!-- Pot 2: Back-Right Corner (Tapered Charcoal with Silver Accent) -->
+    <a-entity position="6.8 0 -6.8">
+      <a-cylinder radius-bottom="0.45" radius-top="0.55" height="1" color="#1C1917" material="roughness: 0.9"></a-cylinder>
+      <!-- Silver Rim -->
+      <a-torus radius="0.55" radius-tubular="0.02" position="0 0.5 0" rotation="90 0 0" color="#CBD5E1" material="metalness: 0.9; roughness: 0.1"></a-torus>
+      <a-cylinder radius="0.5" height="0.1" position="0 0.45 0" color="#422006"></a-cylinder>
+      <!-- White Stones -->
+      <a-sphere radius="0.05" position="0.3 0.5 0" color="#F8FAFC"></a-sphere>
+      <a-sphere radius="0.05" position="-0.2 0.5 0.3" color="#F8FAFC"></a-sphere>
+      
+      <!-- Premium Tall Foliage -->
+      <a-entity position="0 0.5 0">
+        <a-cylinder radius="0.04" height="2" position="0 1 0" color="#064E3B"></a-cylinder>
+        <a-entity rotation="0 0 0">
+          <a-box width="0.8" height="0.02" depth="1.5" position="0.5 1.8 0.3" rotation="35 30 15" color="#059669"></a-box>
+          <a-box width="0.8" height="0.02" depth="1.5" position="-0.5 1.5 -0.3" rotation="35 -30 -15" color="#047857"></a-box>
+        </a-entity>
+        <a-entity rotation="0 90 0">
+          <a-box width="0.7" height="0.02" depth="1.3" position="0.4 1.4 0.2" rotation="25 0 10" color="#10B981"></a-box>
+          <a-box width="0.7" height="0.02" depth="1.3" position="-0.4 1.2 -0.2" rotation="25 0 -10" color="#059669"></a-box>
+        </a-entity>
+      </a-entity>
+    </a-entity>
+
+    <!-- Pot 3: Front-Right Corner (Tapered White with Gold Accent) -->
+    <a-entity position="6.8 0 6.8">
+      <a-cylinder radius-bottom="0.35" radius-top="0.45" height="0.7" color="#FFFFFF" material="roughness: 0.2"></a-cylinder>
+      <a-torus radius="0.45" radius-tubular="0.015" position="0 0.35 0" rotation="90 0 0" color="#D4AF37" material="metalness: 0.9; roughness: 0.1"></a-torus>
+      <a-cylinder radius="0.4" height="0.1" position="0 0.3 0" color="#422006"></a-cylinder>
+      
+      <!-- Modern Broad-Leaf Plant -->
+      <a-entity position="0 0.3 0">
+        <a-cylinder radius="0.02" height="1.6" position="0 0.8 0" color="#166534"></a-cylinder>
+        <a-entity rotation="0 0 0">
+          <a-box width="1" height="0.01" depth="0.8" position="0.6 1.4 0" rotation="10 0 20" color="#15803D"></a-box>
+          <a-box width="1" height="0.01" depth="0.8" position="-0.6 1.2 0" rotation="10 0 -20" color="#166534"></a-box>
+        </a-entity>
+        <a-entity rotation="0 120 0">
+          <a-box width="0.9" height="0.01" depth="0.7" position="0.5 1 0" rotation="20 0 15" color="#15803D"></a-box>
+        </a-entity>
+      </a-entity>
+    </a-entity>
+
+    <!-- Pot 4: Gallery Feature Accent (Charcoal with Silver) -->
+    <a-entity position="-6.8 0 1.5">
+      <a-cylinder radius-bottom="0.4" radius-top="0.5" height="0.6" color="#1C1917" material="roughness: 0.9"></a-cylinder>
+      <a-torus radius="0.5" radius-tubular="0.015" position="0 0.3 0" rotation="90 0 0" color="#CBD5E1" material="metalness: 0.9; roughness: 0.1"></a-torus>
+      <a-cylinder radius="0.45" height="0.1" position="0 0.25 0" color="#422006"></a-cylinder>
+      
+      <!-- Artistic Bushy Arrangement -->
+      <a-entity position="0 0.25 0">
+        <a-sphere radius="0.5" position="0 0.4 0" color="#064E3B" material="roughness: 0.8"></a-sphere>
+        <a-sphere radius="0.4" position="0.3 0.6 0.2" color="#059669"></a-sphere>
+        <a-sphere radius="0.35" position="-0.3 0.5 -0.2" color="#10B981"></a-sphere>
+        <a-sphere radius="0.3" position="0.1 0.7 -0.3" color="#34D399"></a-sphere>
+        <!-- Adding some white "flower" spheres for beauty -->
+        <a-sphere radius="0.06" position="0.4 0.8 0.3" color="#FFFFFF" material="shader: flat"></a-sphere>
+        <a-sphere radius="0.06" position="-0.2 0.7 0.4" color="#FFFFFF" material="shader: flat"></a-sphere>
+        <a-sphere radius="0.06" position="0 0.9 -0.2" color="#FFFFFF" material="shader: flat"></a-sphere>
+      </a-entity>
+    </a-entity>
+
+
+    <!-- CAMERA -->
+    <a-entity position="0 1.6 1">
+      <a-camera></a-camera>
+    </a-entity>
+  </a-scene>
+</body>
+
+</html>
